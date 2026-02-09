@@ -31,7 +31,15 @@ Savepoint tagging (stable releases):
 - `git tag -a v1.0.0 -m "EOEX stable"`
 - `git push origin v1.0.0`
 
+Makefile shortcut:
+
+- `make savepoint VERSION=v1.0.0`
+
 Rollback to a stable savepoint:
 
 - `git checkout v1.0.0`
 - `git checkout -b hotfix/rollback-v1.0.0`
+
+Makefile shortcut:
+
+- `make rollback VERSION=v1.0.0`
