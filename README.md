@@ -22,7 +22,7 @@ Backend (serves the SPA):
 - `uvicorn main:app --reload --port 8000`
 
 Default login:
-- `admin@eoex.com` / `admin123`
+- `system.admin@eoex.com` / `Welcome123!`
 
 ## Release & rollback
 

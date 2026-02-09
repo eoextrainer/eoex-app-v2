@@ -12,38 +12,48 @@
     </script>
   </head>
   <body data-theme="light">
-    <div id="app">
+    <div id="shell" class="shell">
       <aside class="sidebar">
-        <div class="brand">EOEX</div>
-        <nav class="nav">
-          <a href="#/dashboard">Dashboard</a>
-          <a href="#/crm">CRM</a>
-          <a href="#/erp">ERP</a>
-          <a href="#/studio">Studio</a>
-          <a href="#/support">Support</a>
-          <a href="#/settings">Settings</a>
-        </nav>
+        <div class="sidebar-header">
+          <div class="logo">EOEX</div>
+        </div>
+        <button id="hamburger-btn" class="hamburger" aria-expanded="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div class="app-menu" id="app-menu"></div>
       </aside>
 
-      <main class="content">
-        <header class="topbar">
-          <div>
-            <h1 id="page-title">Dashboard</h1>
-            <p class="subtitle">Multi-tenant operations hub</p>
-          </div>
-          <div class="topbar-actions">
-            <span id="user-email"></span>
-            <button id="logout-btn" class="btn btn-outline">Logout</button>
+      <main class="workspace">
+        <header class="workspace-header">
+          <div class="app-tabs" id="app-tabs"></div>
+          <div class="header-actions">
+            <button class="icon-btn" title="Notifications" id="notifications-btn">
+              <span class="icon">🔔</span>
+            </button>
+            <button class="icon-btn" title="Setup" id="setup-btn">
+              <span class="icon">⚙️</span>
+            </button>
+            <button class="icon-btn" title="Login" id="login-btn">
+              <span class="icon">👤</span>
+            </button>
+            <div class="user-pill" id="user-pill">
+              <span id="user-email"></span>
+              <button id="logout-btn" class="link-btn">Logout</button>
+            </div>
           </div>
         </header>
-        <section id="view"></section>
+
+        <section class="module-tabs" id="module-tabs"></section>
+        <section class="module-view" id="view"></section>
       </main>
     </div>
 
     <div id="login-modal" class="modal hidden">
       <div class="modal-card">
         <h2>Sign in</h2>
-        <p>Use the bootstrap admin: admin@eoex.com / admin123</p>
+        <p>All users share the same password: <strong>Welcome123!</strong></p>
         <form id="login-form">
           <label>Email
             <input type="email" name="email" required />
@@ -53,6 +63,10 @@
           </label>
           <button type="submit" class="btn btn-primary">Login</button>
         </form>
+        <details class="credentials-card" open>
+          <summary>Show test users</summary>
+          <div id="credentials-list"></div>
+        </details>
       </div>
     </div>
 

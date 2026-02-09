@@ -44,26 +44,48 @@ async def ensure_bootstrap_admin() -> None:
             "eoex.local",
         )
 
-    existing_user = await db.fetchval(
-        "SELECT 1 FROM users WHERE email = $1",
-        "admin@eoex.com",
-    )
-    if not existing_user:
-        legacy_user = await db.fetchval(
+    password_hash = get_password_hash("Welcome123!")
+    users = [
+        ("system.admin@eoex.com", "system", "Admin", "system_admin"),
+        ("crm.manager@eoex.com", "CRM", "Manager", "crm_manager"),
+        ("studio.manager@eoex.com", "Studio", "Manager", "studio_manager"),
+        ("erp.manager@eoex.com", "ERP", "Manager", "erp_manager"),
+        ("service.manager@eoex.com", "Service", "Manager", "service_manager"),
+        ("bdr@eoex.com", "Business", "Development", "crm_bdr"),
+        ("sales.manager@eoex.com", "Sales", "Account", "crm_sales_manager"),
+        ("marketing.manager@eoex.com", "Marketing", "Manager", "studio_marketing_manager"),
+        ("digital.marketing@eoex.com", "Digital", "Marketing", "studio_digital_marketing"),
+        ("campaign.manager@eoex.com", "Campaign", "Manager", "studio_campaign_manager"),
+        ("hr.manager@eoex.com", "HR", "Manager", "erp_hr_manager"),
+        ("finance.manager@eoex.com", "Finance", "Manager", "erp_finance_manager"),
+        ("resource.planner@eoex.com", "Resource", "Planner", "erp_resource_planning_manager"),
+        ("ceo@eoex.com", "Chief", "Executive", "erp_ceo"),
+        ("support.l1@eoex.com", "Level 1", "Support", "service_level1"),
+        ("support.l2@eoex.com", "Level 2", "Support", "service_level2"),
+        ("support.l3@eoex.com", "Level 3", "Support", "service_level3"),
+    ]
+
+    for email, first_name, last_name, role in users:
+        existing_user = await db.fetchval(
             "SELECT 1 FROM users WHERE email = $1",
-            "admin@eoex.local",
+            email,
         )
-        if legacy_user:
+        if existing_user:
             await db.execute(
                 """
                 UPDATE users
-                SET email = $1, username = $2, password_hash = $3, is_active = true
-                WHERE email = $4
+                SET password_hash = $1,
+                    role = $2,
+                    first_name = $3,
+                    last_name = $4,
+                    is_active = true
+                WHERE email = $5
                 """,
-                "admin@eoex.com",
-                "admin",
-                get_password_hash("admin123"),
-                "admin@eoex.local",
+                password_hash,
+                role,
+                first_name,
+                last_name,
+                email,
             )
         else:
             await db.execute(
@@ -73,12 +95,12 @@ async def ensure_bootstrap_admin() -> None:
                 ) VALUES ($1, $2, $3, $4, $5, $6, $7)
                 """,
                 tenant["tenant_id"],
-                "admin",
-                "admin@eoex.com",
-                get_password_hash("admin123"),
-                "EOEX",
-                "Admin",
-                "admin",
+                email.split("@")[0],
+                email,
+                password_hash,
+                first_name,
+                last_name,
+                role,
             )
 
 
